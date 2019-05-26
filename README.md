@@ -20,6 +20,7 @@
 --------
 ![image](https://github.com/xzh0723/Taobao/blob/master/view/pycharm_1.png)
 ![image](https://github.com/xzh0723/Taobao/blob/master/view/pycharm_2.png)
+![image](https://github.com/xzh0723/Taobao/blob/master/view/pycharm_3.png)
 
 公告
 ========
