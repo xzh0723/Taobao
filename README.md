@@ -18,7 +18,7 @@
     
 结果展示
 --------
-![image](
+![image](https://github.com/xzh0723/Taobao/blob/master/view/pycharm_1.png)
 
 公告
 ========
