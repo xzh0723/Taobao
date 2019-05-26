@@ -16,6 +16,12 @@
     断点调试后可知该生成函数需要的变量字符串为 'cookies的token' + '&' + t + appKey + '&' + data。
     appKey为一个固定值'12574478'，t、data构造也很简单，所以接下来只要调用execjs库执行sign参数的js生成函数即可。
     
+解释说明
+--------
+>>搜索链接为手淘搜索分享的链接，未实现搜索链接的关键词构造。
+
+>>cookies中的token有时效性，过期时页面响应为“令牌过期”，此时需要更新cookies。
+    
 结果展示
 --------
 ![image](https://github.com/xzh0723/Taobao/blob/master/view/pycharm_1.png)
