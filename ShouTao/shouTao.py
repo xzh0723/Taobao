@@ -4,7 +4,7 @@ import re
 import execjs
 from pyquery import PyQuery as pq
 import json
-from utils.config import *
+from ShouTao.config import *
 from ShouTao.mongodb import MongoDB
 from ShouTao.proxy import get_random_proxy
 
@@ -57,7 +57,7 @@ class ShouTao():
                 data[key] = value
         data['page'] = self.page
         data = json.dumps(data)
-        print(data)
+        print(f'data: {data}')
         return data
 
     def get_sign(self, data):
@@ -71,7 +71,7 @@ class ShouTao():
 
         ctx = execjs.compile(js)
         sign = ctx.call('Y', self.token + '&' + t + '&' + self.appKey + '&' + data)
-        print(sign)
+        print(f'sign: {sign}')
         return sign
 
     def search(self, data, sign):
@@ -102,10 +102,10 @@ class ShouTao():
 
         response = requests.get('https://acs.m.taobao.com/h5/mtop.taobao.wsearch.h5search/1.0/?', headers=headers,
                                 params=params)
-        print(response.text)
+        # print(response.text)
         html = re.search('mtopjsonp2\((.*?)\)', response.text).group(1)
         result = json.loads(html)
-        print(result)
+        # print(result)
         listItem = result['data']['listItem']
         for item in listItem:
             print(item)
@@ -119,7 +119,8 @@ class ShouTao():
 
 if __name__ == '__main__':
     max_page = input('请输入你要下载最大页码>>>')
-    for page in range(1, int(max_page) + 1):
+    for page in range(2, int(max_page) + 1):
         shoutao = ShouTao(page)
         shoutao.main()
+        # 设置抓取延时
         time.sleep(random.random() * 10)
