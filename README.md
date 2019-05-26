@@ -15,6 +15,10 @@
 >>>>重点为sign参数。搜索API的initiator 调用栈可以找到sign参数的js生成函数，
     断点调试后可知该生成函数需要的变量字符串为 'cookies的token' + '&' + t + appKey + '&' + data。
     appKey为一个固定值'12574478'，t、data构造也很简单，所以接下来只要调用execjs库执行sign参数的js生成函数即可。
+    
+结果展示
+--------
+![image](
 
 公告
 ========
