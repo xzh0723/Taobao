@@ -98,7 +98,7 @@ class ShouTao():
             'data': data
         }
 
-        headers['cookie'] = cookie
+        headers['cookie'] = self.cookie
 
         response = requests.get('https://acs.m.taobao.com/h5/mtop.taobao.wsearch.h5search/1.0/?', headers=headers,
                                 params=params)
