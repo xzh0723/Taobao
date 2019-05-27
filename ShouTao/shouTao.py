@@ -119,7 +119,7 @@ class ShouTao():
 
 if __name__ == '__main__':
     max_page = input('请输入你要下载最大页码>>>')
-    for page in range(2, int(max_page) + 1):
+    for page in range(1, int(max_page) + 1):
         shoutao = ShouTao(page)
         shoutao.main()
         # 设置抓取延时
