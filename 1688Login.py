@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 
 async def main(username, pwd, url):  # 定义main协程函数，
     # 以下使用await 可以针对耗时的操作进行挂起
-    # 记：一定要给pyppeteer一个有权限删除用户数据的
+    # 记：一定要给pyppeteer权限删除用户数据, 也就是创建自动化对象时设置 userDataDir： 文件夹名称
     browser = await launch({'headless': False, 'args': ['--no-sandbox', '--disable-infobars'], 'userDataDir': r"D:\taobao\taobao_goods\userdata", 'dumpio': True})  # 启动pyppeteer 属于内存中实现交互的模拟器
     page = await browser.newPage()  # 启动个新的浏览器页面
     await page.setUserAgent(
@@ -25,12 +25,12 @@ async def main(username, pwd, url):  # 定义main协程函数，
     # 使用type选定页面元素，并修改其数值，用于输入账号密码，修改的速度仿人类操作，因为有个输入速度的检测机制
     # 因为 pyppeteer 框架需要转换为js操作，而js和python的类型定义不同，所以写法与参数要用字典，类型导入
 
-    # 清空用户名输入框
+    # 登陆过的话用户名输入框中会存在原来用户名, 需要先清空, 确保用户名正确
     # clear = await page.J('.nickx')
     # await clear.click()
-    # await page.click('.nickx')
+    await page.click('.nickx')
     # await page.evaluate('''document.getElementById(TPL_username_1).value=""''')
-    # await page.type("#TPL_username_1", username, {'delay': input_time_random()})
+    await page.type("#TPL_username_1", username, {'delay': input_time_random()})
     await page.type("#TPL_password_1", pwd, {'delay': input_time_random()})
 
     # await page.screenshot({'path': './headless-test-result.png'})    # 截图测试
@@ -74,14 +74,13 @@ async def main(username, pwd, url):  # 定义main协程函数，
             else:
                 await asyncio.sleep(10)
                 # print(page.url)
+                # 登录进入用户主页, 但是获取昵称和cookies偶尔会报错, 不知道为什么, 有知道的大佬还请issue告知
                 nickName = await (await (await page.xpath('//div[contains(@class, "company")]/a/text()'))[0].getProperty('textContent')).jsonValue()
                 print(f'登录成功, 您的昵称为：{nickName}')
                 await get_cookie(page)
                 # await page.goto("https://s.taobao.com/search?q=Macbook")
                 # await asyncio.sleep(5)
                 # html = await page.content()
-                # parse(html)
-                # await get_cookie(page)
                 await page.close()
     # time.sleep(100)
 
@@ -89,15 +88,6 @@ async def close(browser):
     for _page in await browser.pages():
         await _page.close()
     await browser.close()
-
-def parse(html):
-    soup = BeautifulSoup(html, 'lxml')
-    # selector = Selector(text=html)
-    # item_list = selector.css('.items div')
-    item_list = soup.select('.items div')
-    for item in item_list:
-        title = item.select('a.J_ClickStat').get_text()
-        print(title)
 
 # 获取登录后cookie
 async def get_cookie(page):
@@ -148,8 +138,8 @@ def input_time_random():
     return random.randint(150, 201)
 
 if __name__ == '__main__':
-    userName = '落叶成只影成单丶'  # 淘宝用户名
-    pwd = 'nishishei0723'  # 密码
+    userName = '*******'  # 改成自己的淘宝用户名
+    pwd = '*******'  # 改成自己的密码
     loginUrl = 'https://login.taobao.com/member/login.jhtml?style=mini&css_style=b2b&from=b2b&full_redirect=true&redirect_url=https://login.1688.com/member/jump.htm?target=https://login.1688.com/member/marketSigninJump.htm?Done=http://login.1688.com/member/taobaoSellerLoginDispatch.htm&reg= http://member.1688.com/member/join/enterprise_join.htm?lead=http://login.1688.com/member/taobaoSellerLoginDispatch.htm&leadUrl=http://login.1688.com/member/'
     loop = asyncio.get_event_loop()  # 协程，开启个无限循环的程序流程，把一些函数注册到事件循环上。当满足事件发生的时候，调用相应的协程函数。
     loop.run_until_complete(main(userName, pwd, loginUrl))  # 将协程注册到事件循环，并启动事件循环
