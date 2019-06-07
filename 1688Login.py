@@ -1,6 +1,6 @@
 import asyncio
 import time, random
-from pyppeteer.launcher import launch  # 控制模拟浏览器用
+from pyppeteer.launcher import launch
 from retrying import retry  # 设置重试次数用的
 from scrapy import Selector
 from bs4 import BeautifulSoup
@@ -15,7 +15,7 @@ async def main(username, pwd, url):  # 定义main协程函数，
     await page.goto(url)  # 访问登录页面
     # 替换淘宝在检测浏览时采集的一些参数。
     # 就是在浏览器运行的时候，始终让window.navigator.webdriver=false
-    # navigator是windiw对象的一个属性，同时修改plugins，languages，navigator 且让
+    # navigator是windiw对象的一个属性，同时修改plugins，languages，navigator 
     await page.evaluate(
         '''() =>{ Object.defineProperties(navigator,{ webdriver:{ get: () => false } }) }''')  # 以下为插入中间js，将淘宝会为了检测浏览器而调用的js修改其结果。
     await page.evaluate('''() =>{ window.navigator.chrome = { runtime: {},  }; }''')
@@ -99,6 +99,10 @@ async def get_cookie(page):
         str_cookie = str_cookie.format(cookie.get('name'), cookie.get('value'))
         cookies += str_cookie
     print(cookies)
+    
+    # 将cookie 放入 cookie 池 以便多次请求 封账号 利用cookie 对搜索内容进行爬取
+    file = open('cookies.txt', 'a', encoding='utf-8')
+    file.write(cookies)
     return cookies
 
 
