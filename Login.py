@@ -1,5 +1,5 @@
-# 若运行报错
-
+# 报错：pyppeteer.errors.NetworkError: Protocol Error (Runtime.callFunctionOn): Session closed. Most likely the page has been closed.
+# 请前往  https://github.com/miyakogi/pyppeteer/pull/160/files  , 修改pyppeteer源码即可
 
 import asyncio
 import time
@@ -13,7 +13,7 @@ async def main(username, pwd, url):
     # 记：一定要给pyppeteer权限删除用户数据, 即设置userDataDir: 文件夹名称, 否则会报错无法移除用户数据
     browser = await launch({'headless': False, 'args': ['--no-sandbox', '--disable-infobars'], }, userDataDir='./userdata',
                            args=['--window-size=1366,768'])
-    page = await browser.newPage()  # 启动个新的浏览器页面
+    page = await browser.newPage()  # 启动新的浏览器页面
     await page.setJavaScriptEnabled(enabled=True)  # 启用js
     await page.setUserAgent(
         'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36 Edge/16.16299'
